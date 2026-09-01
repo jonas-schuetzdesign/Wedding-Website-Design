@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const schedule = [
   {
     day: "Samstag",
@@ -26,13 +28,13 @@ const schedule = [
 ];
 
 // Schloss Hünigen, Freimettigenstrasse 9, 3510 Konolfingen
-const COORDS = { lat: 46.8982, lng: 7.6072 };
+const COORDS = { lat: 46.8728, lng: 7.6227 };
 const APPLE_MAPS =
   `https://maps.apple.com/?address=Freimettigenstrasse+9,3510+Konolfingen,Switzerland&ll=${COORDS.lat},${COORDS.lng}&q=Schloss+H%C3%BCnigen`;
 const GOOGLE_MAPS =
   `https://www.google.com/maps/search/?api=1&query=Schloss+H%C3%BCnigen+Freimettigenstrasse+9+3510+Konolfingen`;
 const OSM_EMBED =
-  `https://www.openstreetmap.org/export/embed.html?bbox=7.5972%2C46.8882%2C7.6172%2C46.9082&layer=mapnik&marker=${COORDS.lat}%2C${COORDS.lng}`;
+  `https://www.openstreetmap.org/export/embed.html?bbox=7.6127%2C46.8628%2C7.6327%2C46.8828&layer=mapnik&marker=${COORDS.lat}%2C${COORDS.lng}`;
 
 function PinIcon() {
   return (
@@ -87,6 +89,8 @@ function GoogleMapsIcon() {
 }
 
 export default function WhenWhere() {
+  const [mapActive, setMapActive] = useState(false);
+
   return (
     <section id="wann-wo" className="border-t border-line bg-white">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
@@ -151,15 +155,32 @@ export default function WhenWhere() {
       </div>
 
       {/* ── Zone C: Karte, randabfallend, mit Adress-Overlay ── */}
-      <div className="relative h-105 sm:h-120 md:h-150">
+      <div
+        className="relative h-105 sm:h-120 md:h-150"
+        onMouseLeave={() => setMapActive(false)}
+      >
         <iframe
           title="Karte Schloss Hünigen"
           src={OSM_EMBED}
           className="absolute inset-0 h-full w-full border-0"
+          style={{ pointerEvents: mapActive ? "auto" : "none" }}
           loading="lazy"
           referrerPolicy="no-referrer"
           aria-label="OpenStreetMap-Karte mit Markierung für Schloss Hünigen, Freimettigenstrasse 9, Konolfingen"
         />
+
+        {!mapActive && (
+          <button
+            type="button"
+            onClick={() => setMapActive(true)}
+            aria-label="Karte aktivieren, um zu zoomen und zu verschieben"
+            className="absolute inset-0 flex items-center justify-center bg-navy/5 transition-colors hover:bg-navy/10"
+          >
+            <span className="border border-white bg-navy/80 px-4 py-2 text-xs uppercase tracking-[0.18em] text-white">
+              Zum Interagieren klicken
+            </span>
+          </button>
+        )}
 
         <div className="absolute inset-x-0 bottom-0 md:inset-x-auto md:bottom-8 md:left-8 md:right-auto">
           <div className="border border-line bg-white p-6 sm:max-w-sm sm:p-8">

@@ -5,7 +5,7 @@ import Faq from "./components/Faq";
 import Footer from "./components/Footer";
 
 // Placeholder external RSVP destination — swap for the real form/link.
-const RSVP_URL = "https://forms.gle/lucaundjonas-rsvp";
+const RSVP_URL = "https://tally.so/r/jaV7K1";
 
 export default function App() {
   return (
