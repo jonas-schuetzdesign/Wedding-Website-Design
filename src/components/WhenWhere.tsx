@@ -88,76 +88,96 @@ function GoogleMapsIcon() {
 
 export default function WhenWhere() {
   return (
-    <section id="wann-wo" className="border-t border-line bg-white px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto max-w-6xl space-y-20">
+    <section id="wann-wo" className="border-t border-line bg-white">
+      <div className="mx-auto max-w-6xl px-6 md:px-10">
 
-        {/* ── Top grid: info + schedule ── */}
-        <div className="grid gap-14 md:grid-cols-[0.9fr_1.1fr] md:gap-20">
-          <div className="md:sticky md:top-28 md:self-start space-y-9">
-            <div>
-              <h2 className="font-display text-4xl leading-tight text-navy md:text-5xl">
+        {/* ── Zone A: Headline + Eckdaten ── */}
+        <div className="border-b border-line py-16 md:py-24">
+          <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+            <div className="max-w-md">
+              <h2 className="font-display text-6xl leading-[1.05] text-navy">
                 Zwei Tage,
                 <br />
                 ein Versprechen.
               </h2>
-              <p className="mt-6 max-w-sm text-[0.95rem] leading-relaxed text-ink-strong">
+              <p className="mt-6 max-w-md text-[0.95rem] leading-relaxed text-ink-strong">
                 Wir feiern unsere Hochzeit über ein ganzes Wochenende im Schloss Hünigen bei
                 Konolfingen — umgeben von Park, Wald und den Menschen, die uns am wichtigsten sind.
               </p>
             </div>
 
-            <dl className="space-y-4 border-t border-mist-mid pt-8 text-sm">
-              <div className="flex items-baseline justify-between gap-6">
-                <dt className="uppercase tracking-[0.18em] text-coral-deep">Datum</dt>
-                <dd className="text-right text-coral-deep">19. – 20. Juni 2027</dd>
+            <dl className="space-y-6 text-left md:shrink-0 md:text-right">
+              <div>
+                <dt className="text-[0.72rem] uppercase tracking-[0.2em] text-coral-deep">Datum</dt>
+                <dd className="mt-2 text-lg font-medium text-navy md:text-xl">19. – 20. Juni 2027</dd>
               </div>
-              <div className="flex items-baseline justify-between gap-6">
-                <dt className="uppercase tracking-[0.18em] text-coral-deep">Ort</dt>
-                <dd className="font-body font-light text-right text-coral-deep" style={{ fontSize: "14px" }}>Schloss Hünigen</dd>
+              <div>
+                <dt className="text-[0.72rem] uppercase tracking-[0.2em] text-coral-deep">Ort</dt>
+                <dd className="mt-2 text-lg font-medium text-navy md:text-xl">Schloss Hünigen</dd>
               </div>
             </dl>
           </div>
-
-          <ol className="relative space-y-10 md:space-y-14">
-            <span aria-hidden className="absolute left-[7px] top-2 bottom-2 w-px bg-mist md:left-[9px]" />
-            {schedule.map((item, i) => (
-              <li key={i} className="relative pl-10 md:pl-14">
-                <span
-                  aria-hidden
-                  className="absolute left-0 top-1.5 grid h-4 w-4 place-items-center border border-navy/40 bg-white md:h-5 md:w-5"
-                >
-                  <span className="h-1.5 w-1.5 bg-coral-deep" />
-                </span>
-                <p className="text-[0.72rem] font-bold uppercase tracking-[0.28em] text-coral-deep">
-                  {item.day}, {item.date} · {item.time}
-                </p>
-                <h3 className="mt-3 font-display text-navy" style={{ fontSize: "48px" }}>{item.title}</h3>
-                <p className="mt-4 max-w-md text-[0.95rem] leading-relaxed text-ink-strong">{item.detail}</p>
-              </li>
-            ))}
-          </ol>
         </div>
 
-        {/* ── Prominent address + map block ── */}
-        <div className="overflow-hidden border border-line bg-white">
+        {/* ── Zone B: Programm ── */}
+        <ol className="divide-y divide-line border-b border-line">
+          {schedule.map((item, i) => (
+            <li
+              key={i}
+              className="flex flex-wrap items-start justify-between gap-x-4 gap-y-6 py-10 md:grid md:grid-cols-12 md:items-start md:gap-x-10 md:py-14"
+            >
+              <span className="font-display text-4xl text-coral-deep md:col-span-2 md:text-6xl">
+                {String(i + 1).padStart(2, "0")}
+              </span>
 
-          {/* Address header */}
-          <div className="px-6 py-7 sm:px-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-b border-line">
+              <div className="text-right md:col-span-3 md:text-left">
+                <p className="text-sm font-bold uppercase tracking-[0.16em] text-coral-deep">
+                  {item.day}, {item.date}
+                </p>
+                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.16em] text-navy">
+                  {item.time}
+                </p>
+              </div>
+
+              <div className="w-full md:col-span-7 md:w-auto">
+                <h3 className="font-display text-5xl text-navy md:text-5xl">{item.title}</h3>
+                <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-ink-strong">
+                  {item.detail}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* ── Zone C: Karte, randabfallend, mit Adress-Overlay ── */}
+      <div className="relative h-105 sm:h-120 md:h-150">
+        <iframe
+          title="Karte Schloss Hünigen"
+          src={OSM_EMBED}
+          className="absolute inset-0 h-full w-full border-0"
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          aria-label="OpenStreetMap-Karte mit Markierung für Schloss Hünigen, Freimettigenstrasse 9, Konolfingen"
+        />
+
+        <div className="absolute inset-x-0 bottom-0 md:inset-x-auto md:bottom-8 md:left-8 md:right-auto">
+          <div className="border border-line bg-white p-6 sm:max-w-sm sm:p-8">
             <div className="flex items-start gap-3">
               <PinIcon />
               <div>
-                <p className="font-display text-2xl text-ink-strong leading-tight">
+                <p className="font-display text-xl leading-tight text-navy">
                   Schloss Hünigen
                 </p>
-                <p className="mt-1 text-[0.95rem] text-ink leading-snug">
-                  Freimettigenstrasse 9<br />
+                <p className="mt-1.5 text-base leading-snug text-ink-strong">
+                  Freimettigenstrasse 9
+                  <br />
                   3510 Konolfingen BE
                 </p>
               </div>
             </div>
 
-            {/* Map app buttons */}
-            <div className="flex flex-wrap gap-3 shrink-0">
+            <div className="mt-6 flex flex-wrap gap-3">
               <a
                 href={APPLE_MAPS}
                 target="_blank"
@@ -178,28 +198,6 @@ export default function WhenWhere() {
               </a>
             </div>
           </div>
-
-          {/* Map embed — OpenStreetMap (no API key, free) */}
-          <div className="relative h-[300px] sm:h-[380px] md:h-[440px]">
-            <iframe
-              title="Karte Schloss Hünigen"
-              src={OSM_EMBED}
-              className="absolute inset-0 w-full h-full border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer"
-              aria-label="OpenStreetMap-Karte mit Markierung für Schloss Hünigen, Freimettigenstrasse 9, Konolfingen"
-            />
-            {/* Subtle coral overlay tint on the map edges */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse at 50% 0%, rgba(232,145,125,0.07) 0%, transparent 60%)",
-              }}
-            />
-          </div>
-
         </div>
       </div>
     </section>

@@ -47,9 +47,9 @@ function FaqItem({
           type="button"
           onClick={onToggle}
           aria-expanded={isOpen}
-          className="group flex w-full items-center gap-5 py-6 text-left focus-visible:outline-none md:py-7"
+          className="group flex w-full items-baseline gap-5 py-6 text-left focus-visible:outline-none md:py-7"
         >
-          <span className="font-display text-base text-coral tabular-nums">
+          <span className="font-display text-4xl text-coral-deep tabular-nums md:text-6xl">
             {String(index + 1).padStart(2, "0")}
           </span>
           <span className="flex-1 font-body text-xl text-navy transition-colors group-hover:text-navy/70 md:text-2xl" style={{ fontWeight: 200 }}>
@@ -57,7 +57,7 @@ function FaqItem({
           </span>
           <span
             aria-hidden
-            className={`grid h-8 w-8 shrink-0 place-items-center border border-mist-mid bg-white text-mist transition-all duration-300 group-hover:border-coral/60 group-hover:text-coral-deep ${
+            className={`grid h-8 w-8 shrink-0 self-center place-items-center border border-mist-mid bg-white text-mist transition-all duration-300 group-hover:border-coral/60 group-hover:text-coral-deep ${
               isOpen ? "rotate-45" : ""
             }`}
           >
@@ -72,7 +72,7 @@ function FaqItem({
         style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
       >
         <div className="min-h-0">
-          <p className="max-w-2xl pb-7 pl-10 pr-4 text-[0.97rem] leading-relaxed text-ink-strong md:pl-11">
+          <p className="max-w-2xl pb-7 pl-16 pr-4 text-[0.97rem] leading-relaxed text-ink-strong md:pl-24">
             {a}
           </p>
         </div>
@@ -85,29 +85,31 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="border-t border-line bg-white px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
-        <div className="md:sticky md:top-28 md:self-start">
-          <h2 className="font-display text-4xl leading-tight text-navy md:text-5xl">
-            Häufige Fragen
-          </h2>
-          <p className="mt-6 max-w-xs text-[0.95rem] leading-relaxed text-ink-strong">
-            Das Wichtigste im Überblick. Sollte eure Frage offen bleiben, meldet euch jederzeit bei
-            uns.
-          </p>
-        </div>
+    <section id="faq" className="border-t border-line bg-white">
+      <div className="mx-auto max-w-6xl px-6 md:px-10">
+        <div className="grid gap-12 py-16 md:grid-cols-[0.8fr_1.2fr] md:gap-20 md:py-24">
+          <div className="md:sticky md:top-28 md:self-start">
+            <h2 className="font-display text-6xl leading-[1.05] text-navy">
+              Häufige Fragen
+            </h2>
+            <p className="mt-6 max-w-xs text-[0.95rem] leading-relaxed text-ink-strong">
+              Das Wichtigste im Überblick. Sollte eure Frage offen bleiben, meldet euch jederzeit
+              bei uns.
+            </p>
+          </div>
 
-        <div className="border-t border-line">
-          {faqs.map((item, i) => (
-            <FaqItem
-              key={item.q}
-              index={i}
-              q={item.q}
-              a={item.a}
-              isOpen={openIndex === i}
-              onToggle={() => setOpenIndex(openIndex === i ? null : i)}
-            />
-          ))}
+          <div className="border-t border-line">
+            {faqs.map((item, i) => (
+              <FaqItem
+                key={item.q}
+                index={i}
+                q={item.q}
+                a={item.a}
+                isOpen={openIndex === i}
+                onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
