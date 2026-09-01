@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import Monogram from "./Monogram";
 
+// Shared clamp so the monogram and the names always render at the exact same height while resizing.
+const MARK_SIZE = "clamp(2.25rem, 5.5vw, 3.5rem)";
+
 const BG_PHOTOS = [
   "/images/IMG_1725.webp",
   "/images/IMG_2779.webp",
@@ -87,7 +90,7 @@ export default function Hero({ rsvpUrl: _rsvpUrl }: { rsvpUrl: string }) {
           transition: "opacity 0.8s ease 0.6s",
         }}
       >
-        <Monogram className="h-14 w-14 text-white" />
+        <Monogram className="text-white" style={{ height: MARK_SIZE, width: MARK_SIZE }} />
       </div>
 
       {/* Bottom-right: names */}
@@ -101,7 +104,7 @@ export default function Hero({ rsvpUrl: _rsvpUrl }: { rsvpUrl: string }) {
       >
         <p
           className="font-display font-bold text-white leading-none"
-          style={{ fontSize: "clamp(2rem, 5vw, 52px)" }}
+          style={{ fontSize: MARK_SIZE }}
         >
           Luca &amp; Jonas
         </p>
