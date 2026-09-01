@@ -3,19 +3,19 @@ import { useState } from "react";
 const faqs = [
   {
     q: "Was sollen wir anziehen?",
-    a: "Wir wünschen uns festliche, sommerliche Garderobe. Denkt an einen Spaziergang über Kies und Wiese — flache Absätze sind im Schlosspark von Vorteil. Bitte verzichtet auf reines Weiss, das ist unser Tag zum Strahlen.",
+    a: "Wir wünschen uns festliche, sommerliche Garderobe. Der Dresscode lautet Garden Party Elegant: leichte Anzüge, Leinen, gerne Farbe. Alles, worin man auf einer Wiese anstossen und später noch tanzen kann. <br />Bitte verzichtet auf ein komplett weisses Outfit, das ist unser Tag zum Strahlen. Weisse Hemden sind selbstverständlich willkommen. <br />Zwei praktische Hinweise: Wir feiern zu einem grossen Teil draussen, auf Rasen und Kies. Hohe Absätze haben es da schwer. Und am Abend wird es im Emmental frisch, packt also etwas Wärmeres ein.",
   },
   {
     q: "Können wir vor Ort übernachten?",
-    a: "Ja. Im Schloss Hünigen steht ein Kontingent an Zimmern für unsere Gäste bereit. Bucht bitte frühzeitig direkt über den Anmeldelink und gebt das Stichwort «Hochzeit Luca & Jonas» an. In der Umgebung gibt es zusätzlich mehrere Gasthöfe.",
+    a: "Ja, und wir hoffen sehr, dass ihr bleibt. Für jede Einladung ist ein Zimmer im Schloss reserviert, passend zur Anzahl der eingeladenen Personen. Die Übernachtung und der Brunch am Sonntag sind unser Geschenk an euch, ihr müsst euch um nichts kümmern.<br />Sagt uns bei der Anmeldung einfach Bescheid, ob ihr das Zimmer nutzt. Wer ein Kinderbett braucht, schreibt es uns bitte gleich dazu.",
   },
   {
     q: "Wie reisen wir am besten an?",
-    a: "Mit dem Auto seid ihr in rund 20 Minuten von Bern in Konolfingen. Kostenlose Parkplätze sind direkt beim Schloss vorhanden. Mit dem ÖV fahrt ihr bis Bahnhof Konolfingen; von dort organisieren wir am Samstagvormittag einen Shuttle.",
+    a: "Mit dem Auto seid ihr in rund 20 Minuten von Bern in Konolfingen. Kostenlose Parkplätze sind direkt beim Schloss vorhanden. Mit dem ÖV könnt ihr bis Stalden i.E. fahren. Das ist direkt neben dem Schloss.",
   },
   {
     q: "Dürfen wir unsere Kinder mitbringen?",
-    a: "Wir lieben eure Kinder — gebt uns bei der Anmeldung einfach kurz Bescheid, wer mitkommt. Während des Abends kümmert sich eine liebevolle Kinderbetreuung um die Kleinen, damit alle unbeschwert feiern können.",
+    a: "Wir lieben eure Kinder und wünschen uns für diesen Abend trotzdem eine Feier unter Erwachsenen. Seht es als Einladung an euch beide: ein Wochenende im Schloss, ausschlafen, Brunch und einmal keine Verhandlungen ums Zubettgehen. <br />Ganz Kleine bis 4 Jahre sind natürlich willkommen. Wir wissen, dass sich das nicht immer organisieren lässt.",
   },
   {
     q: "Was wünscht ihr euch zur Hochzeit?",
@@ -73,7 +73,11 @@ function FaqItem({
       >
         <div className="min-h-0">
           <p className="max-w-2xl pb-7 pl-16 pr-4 text-[0.97rem] leading-relaxed text-ink-strong md:pl-24">
-            {a}
+            {a.split("<br />").map((line, i) => (
+              <span key={i} className={i > 0 ? "mt-3 block" : "block"}>
+                {line.trim()}
+              </span>
+            ))}
           </p>
         </div>
       </div>

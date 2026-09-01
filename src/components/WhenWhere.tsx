@@ -112,12 +112,12 @@ export default function WhenWhere() {
 
             <dl className="space-y-6 text-left md:shrink-0 md:text-right">
               <div>
-                <dt className="text-[0.72rem] uppercase tracking-[0.2em] text-coral-deep">Datum</dt>
-                <dd className="mt-2 text-lg font-medium text-navy md:text-xl">19. – 20. Juni 2027</dd>
+                <dt className="text-sm  uppercase tracking-[0.16em] text-coral-deep">Datum</dt>
+                <dd className="mt-2 text-sm font-semibold tracking-[0.16em] text-navy">19. – 20. Juni 2027</dd>
               </div>
               <div>
-                <dt className="text-[0.72rem] uppercase tracking-[0.2em] text-coral-deep">Ort</dt>
-                <dd className="mt-2 text-lg font-medium text-navy md:text-xl">Schloss Hünigen</dd>
+                <dt className="text-sm uppercase tracking-[0.16em] text-coral-deep">Ort</dt>
+                <dd className="mt-2 text-sm font-semibold tracking-[0.16em] text-navy">Schloss Hünigen</dd>
               </div>
             </dl>
           </div>
@@ -134,18 +134,18 @@ export default function WhenWhere() {
                 {String(i + 1).padStart(2, "0")}
               </span>
 
-              <div className="text-right md:col-span-3 md:text-left">
-                <p className="text-sm font-bold uppercase tracking-[0.16em] text-coral-deep">
+              <div className="text-right md:col-span-3 md:w-fit md:mx-auto md:text-left">
+                <p className="text-sm uppercase tracking-[0.16em] text-coral-deep">
                   {item.day}, {item.date}
                 </p>
-                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.16em] text-navy">
+                <p className="mt-2 text-sm font-semibold tracking-[0.16em] text-navy">
                   {item.time}
                 </p>
               </div>
 
               <div className="w-full md:col-span-7 md:w-auto">
                 <h3 className="font-display text-5xl text-navy md:text-5xl">{item.title}</h3>
-                <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-ink-strong">
+                <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-strong">
                   {item.detail}
                 </p>
               </div>
