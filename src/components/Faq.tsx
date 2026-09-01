@@ -1,0 +1,115 @@
+import { useState } from "react";
+
+const faqs = [
+  {
+    q: "Was sollen wir anziehen?",
+    a: "Wir wünschen uns festliche, sommerliche Garderobe. Denkt an einen Spaziergang über Kies und Wiese — flache Absätze sind im Schlosspark von Vorteil. Bitte verzichtet auf reines Weiss, das ist unser Tag zum Strahlen.",
+  },
+  {
+    q: "Können wir vor Ort übernachten?",
+    a: "Ja. Im Schloss Hünigen steht ein Kontingent an Zimmern für unsere Gäste bereit. Bucht bitte frühzeitig direkt über den Anmeldelink und gebt das Stichwort «Hochzeit Luca & Jonas» an. In der Umgebung gibt es zusätzlich mehrere Gasthöfe.",
+  },
+  {
+    q: "Wie reisen wir am besten an?",
+    a: "Mit dem Auto seid ihr in rund 20 Minuten von Bern in Konolfingen. Kostenlose Parkplätze sind direkt beim Schloss vorhanden. Mit dem ÖV fahrt ihr bis Bahnhof Konolfingen; von dort organisieren wir am Samstagvormittag einen Shuttle.",
+  },
+  {
+    q: "Dürfen wir unsere Kinder mitbringen?",
+    a: "Wir lieben eure Kinder — gebt uns bei der Anmeldung einfach kurz Bescheid, wer mitkommt. Während des Abends kümmert sich eine liebevolle Kinderbetreuung um die Kleinen, damit alle unbeschwert feiern können.",
+  },
+  {
+    q: "Was wünscht ihr euch zur Hochzeit?",
+    a: "Das grösste Geschenk ist eure Anwesenheit. Wer uns darüber hinaus etwas schenken möchte, unterstützt gerne unsere Hochzeitsreise — Details dazu findet ihr ebenfalls über den Anmeldelink.",
+  },
+  {
+    q: "Bis wann sollen wir uns anmelden?",
+    a: "Bitte gebt uns bis am 19. Oktober 2026 Bescheid, ob ihr dabei seid. So können wir rechtzeitig planen und alles für ein unvergessliches Wochenende vorbereiten.",
+  },
+];
+
+function FaqItem({
+  q,
+  a,
+  isOpen,
+  onToggle,
+  index,
+}: {
+  q: string;
+  a: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  index: number;
+}) {
+  return (
+    <div className="border-b border-line">
+      <h3>
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={isOpen}
+          className="group flex w-full items-center gap-5 py-6 text-left focus-visible:outline-none md:py-7"
+        >
+          <span className="font-display text-base text-coral tabular-nums">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span className="flex-1 font-body text-xl text-navy transition-colors group-hover:text-navy/70 md:text-2xl" style={{ fontWeight: 200 }}>
+            {q}
+          </span>
+          <span
+            aria-hidden
+            className={`grid h-8 w-8 shrink-0 place-items-center border border-mist-mid bg-white text-mist transition-all duration-300 group-hover:border-coral/60 group-hover:text-coral-deep ${
+              isOpen ? "rotate-45" : ""
+            }`}
+          >
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M6.5 0v13M0 6.5h13" stroke="currentColor" strokeWidth="1.2" />
+            </svg>
+          </span>
+        </button>
+      </h3>
+      <div
+        className="grid overflow-hidden transition-all duration-500 ease-out"
+        style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
+      >
+        <div className="min-h-0">
+          <p className="max-w-2xl pb-7 pl-10 pr-4 text-[0.97rem] leading-relaxed text-ink-strong md:pl-11">
+            {a}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Faq() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  return (
+    <section id="faq" className="border-t border-line bg-white px-6 py-24 md:px-10 md:py-32">
+      <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
+        <div className="md:sticky md:top-28 md:self-start">
+          <h2 className="font-display text-4xl leading-tight text-navy md:text-5xl">
+            Häufige Fragen
+          </h2>
+          <p className="mt-6 max-w-xs text-[0.95rem] leading-relaxed text-ink-strong">
+            Das Wichtigste im Überblick. Sollte eure Frage offen bleiben, meldet euch jederzeit bei
+            uns.
+          </p>
+        </div>
+
+        <div className="border-t border-line">
+          {faqs.map((item, i) => (
+            <FaqItem
+              key={item.q}
+              index={i}
+              q={item.q}
+              a={item.a}
+              isOpen={openIndex === i}
+              onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,11 @@
+{
+  "title": "L&J Wedding",
+  "description": "Create personalized wedding websites with RSVP functionality, FAQs, and a romantic design that matches your invitation, making planning seamless and stylish.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap');
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Bigilla';
+  src:
+    url('/fonts/Bigilla-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-display: 'Bigilla', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --color-ink: #80848c;
+  --color-ink-strong: #565a63;
+  --color-ink-soft: #9aa0a8;
+  --color-line: #d8dbe3;
+  --color-cream: #f5f6f9;
+  --color-blush: #f6efe9;
+  --color-coral: #e8917d;
+  --color-coral-deep: #d97a63;
+  --color-mist: #b5b9c2;
+  --color-mist-mid: #d0d3db;
+  --color-mist-pale: #eaecf2;
+  --color-mist-ghost: #f2f3f7;
+  --color-navy: #35405a;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-ink-strong);
+  font-family: var(--font-body);
+  font-weight: 300;
+}
+
+/* Bigilla display — must set font-weight: 700 so the @font-face fires */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+::selection {
+  background: rgba(232, 145, 125, 0.22);
+  color: var(--color-ink-strong);
+}
+
+html {
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+a {
+  color: inherit;
+}
+
+.btn-sweep {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 2.25rem;
+  border-radius: 0;
+  border: 1.5px solid var(--color-navy);
+  color: var(--color-navy);
+  overflow: hidden;
+  text-decoration: none;
+  isolation: isolate;
+  transition: color 0.38s ease, border-color 0.38s ease;
+}
+
+.btn-sweep::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-coral-deep) 100%);
+  translate: -100% 0;
+  transition: translate 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.btn-sweep:hover::before,
+.btn-sweep:focus-visible::before {
+  translate: 0 0;
+}
+
+.btn-sweep:hover,
+.btn-sweep:focus-visible {
+  color: #fff;
+  border-color: var(--color-coral-deep);
+}
+
+.btn-sweep__label {
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.btn-sweep__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 0;
+  flex-shrink: 0;
+  transition: transform 0.28s ease;
+}
+
+.btn-sweep:hover .btn-sweep__arrow,
+.btn-sweep:focus-visible .btn-sweep__arrow {
+  transform: translateX(3px);
+}
+
+.btn-sweep:focus-visible {
+  outline: 2px solid var(--color-coral);
+  outline-offset: 3px;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-14px) scale(1.015); }
+}
+
+@keyframes names-in {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
