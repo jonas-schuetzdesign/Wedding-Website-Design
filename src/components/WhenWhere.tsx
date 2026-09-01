@@ -96,7 +96,7 @@ export default function WhenWhere() {
       <div className="mx-auto max-w-6xl px-6 md:px-10">
 
         {/* ── Zone A: Headline + Eckdaten ── */}
-        <div className="border-b border-line py-16 md:py-24">
+        <div className="border-b border-line py-20 md:py-24">
           <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
             <div className="max-w-md">
               <h2 className="font-display text-6xl leading-[1.05] text-navy">
@@ -104,7 +104,7 @@ export default function WhenWhere() {
                 <br />
                 ein Versprechen.
               </h2>
-              <p className="mt-6 max-w-md text-[0.95rem] leading-relaxed text-ink-strong">
+              <p className="mt-6 text-[0.95rem] leading-relaxed text-ink-strong">
                 Wir feiern unsere Hochzeit über ein ganzes Wochenende im Schloss Hünigen bei
                 Konolfingen — umgeben von Park, Wald und den Menschen, die uns am wichtigsten sind.
               </p>
@@ -112,7 +112,7 @@ export default function WhenWhere() {
 
             <dl className="space-y-6 text-left md:shrink-0 md:text-right">
               <div>
-                <dt className="text-sm  uppercase tracking-[0.16em] text-coral-deep">Datum</dt>
+                <dt className="text-sm uppercase tracking-[0.16em] text-coral-deep">Datum</dt>
                 <dd className="mt-2 text-sm font-semibold tracking-[0.16em] text-navy">19. – 20. Juni 2027</dd>
               </div>
               <div>
@@ -128,7 +128,7 @@ export default function WhenWhere() {
           {schedule.map((item, i) => (
             <li
               key={i}
-              className="flex flex-wrap items-start justify-between gap-x-4 gap-y-6 py-10 md:grid md:grid-cols-12 md:items-start md:gap-x-10 md:py-14"
+              className="flex flex-wrap items-start justify-between gap-x-4 gap-y-6 py-12 md:grid md:grid-cols-12 md:items-start md:gap-x-10 md:py-14"
             >
               <span className="font-display text-4xl text-coral-deep md:col-span-2 md:text-6xl">
                 {String(i + 1).padStart(2, "0")}
@@ -144,7 +144,7 @@ export default function WhenWhere() {
               </div>
 
               <div className="w-full md:col-span-7 md:w-auto">
-                <h3 className="font-display text-5xl text-navy md:text-5xl">{item.title}</h3>
+                <h3 className="font-display text-5xl text-navy">{item.title}</h3>
                 <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-strong">
                   {item.detail}
                 </p>
