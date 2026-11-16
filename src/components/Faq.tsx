@@ -27,6 +27,11 @@ const faqs = [
   },
 ];
 
+// Focus indicator for the question buttons. `focus-visible` only shows it during keyboard
+// navigation, never on mouse clicks. While this is empty, the browser's default ring is used.
+// TODO(human): add the Tailwind classes for the FAQ focus style.
+const FOCUS_STYLE = "";
+
 function FaqItem({
   q,
   a,
@@ -47,12 +52,12 @@ function FaqItem({
           type="button"
           onClick={onToggle}
           aria-expanded={isOpen}
-          className="group flex w-full items-baseline gap-5 py-6 text-left focus-visible:outline-none md:py-7"
+          className={`group flex w-full items-baseline gap-5 py-6 text-left md:py-7 ${FOCUS_STYLE}`}
         >
           <span className="font-display text-4xl text-coral-deep tabular-nums md:text-6xl">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <span className="flex-1 font-body text-xl text-navy transition-colors group-hover:text-navy/70 md:text-2xl" style={{ fontWeight: 200 }}>
+          <span className="flex-1 font-body text-xl font-light text-navy transition-colors group-hover:text-navy/70 md:text-2xl">
             {q}
           </span>
           <span
@@ -72,7 +77,7 @@ function FaqItem({
         style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
       >
         <div className="min-h-0">
-          <p className="max-w-2xl pb-7 pl-16 pr-4 text-[0.97rem] leading-relaxed text-ink-strong md:pl-24">
+          <p className="max-w-2xl pb-7 pl-16 pr-4 text-base leading-relaxed text-ink-strong md:pl-24">
             {a.split("<br />").map((line, i) => (
               <span key={i} className={i > 0 ? "mt-3 block" : "block"}>
                 {line.trim()}
@@ -96,7 +101,7 @@ export default function Faq() {
             <h2 className="font-display text-6xl leading-[1.05] text-navy">
               Häufige Fragen
             </h2>
-            <p className="mt-6 max-w-xs text-[0.95rem] leading-relaxed text-ink-strong">
+            <p className="mt-6 max-w-xs text-base leading-relaxed text-ink-strong">
               Das Wichtigste im Überblick. Sollte eure Frage offen bleiben, meldet euch jederzeit
               bei uns.
             </p>

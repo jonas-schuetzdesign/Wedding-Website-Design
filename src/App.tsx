@@ -1,5 +1,6 @@
 import Hero from "./components/HeroV3";
 import WhenWhere from "./components/WhenWhere";
+import Venue from "./components/Venue";
 import Rsvp from "./components/Rsvp";
 import Faq from "./components/Faq";
 import Footer from "./components/Footer";
@@ -13,6 +14,7 @@ export default function App() {
       <main>
         <Hero rsvpUrl={RSVP_URL} />
         <WhenWhere />
+        <Venue />
         <Rsvp rsvpUrl={RSVP_URL} />
         <Faq />
       </main>

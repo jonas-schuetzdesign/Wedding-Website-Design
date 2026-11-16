@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap');
+/* Satoshi (Fontshare, ITF Free Font License): one variable file covering weights 300–900 */
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@1&display=swap');
 @import 'tailwindcss';
 
 @font-face {
@@ -12,115 +13,133 @@
 
 @theme {
   --font-display: 'Bigilla', Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-body: 'Satoshi', system-ui, sans-serif;
 
   --color-ink: #80848c;
   --color-ink-strong: #565a63;
   --color-line: #d8dbe3;
   --color-coral: #e8917d;
   --color-coral-deep: #d97a63;
+  --color-coral-light: #f0a896; /* coral for small text on navy (5.3:1) */
   --color-mist: #b5b9c2;
   --color-mist-mid: #d0d3db;
   --color-navy: #35405a;
 }
 
-html,
-body,
-#root {
-  height: 100%;
+/*
+ * All custom CSS sits inside Tailwind's cascade layers (base < components < utilities).
+ * Unlayered CSS would beat every Tailwind utility regardless of selector specificity,
+ * so classes like `hover:text-coral-deep` on a link would be silently ignored.
+ */
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: var(--color-ink-strong);
+    font-family: var(--font-body);
+    font-weight: 300;
+  }
+
+  ::selection {
+    background: rgba(232, 145, 125, 0.22);
+    color: var(--color-ink-strong);
+  }
+
+  html {
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+  }
+  html::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
 }
 
-body {
-  background-color: #ffffff;
-  color: var(--color-ink-strong);
-  font-family: var(--font-body);
-  font-weight: 300;
-}
+@layer components {
+  /* Bigilla display — must set font-weight: 700 so the @font-face fires */
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
 
-/* Bigilla display — must set font-weight: 700 so the @font-face fires */
-.font-display {
-  font-family: var(--font-display);
-  font-weight: 700;
-}
+  .btn-sweep {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    /* Tighter on phones so 16px labels fit on one line inside the RSVP card */
+    gap: 0.75rem;
+    padding: 0.85rem 1.25rem;
+    border-radius: 0;
+    border: 1.5px solid var(--color-navy);
+    color: var(--color-navy);
+    overflow: hidden;
+    text-decoration: none;
+    isolation: isolate;
+    transition: color 0.38s ease, border-color 0.38s ease;
 
-::selection {
-  background: rgba(232, 145, 125, 0.22);
-  color: var(--color-ink-strong);
-}
+    @media (min-width: 40rem) {
+      gap: 1rem;
+      padding-inline: 2.25rem;
+    }
+  }
 
-html {
-  scrollbar-width: none;
-  scroll-behavior: smooth;
-}
-html::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
+  .btn-sweep::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-coral-deep) 100%);
+    translate: -100% 0;
+    transition: translate 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+  }
 
-a {
-  color: inherit;
-}
+  .btn-sweep:hover::before,
+  .btn-sweep:focus-visible::before {
+    translate: 0 0;
+  }
 
-.btn-sweep {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.85rem 2.25rem;
-  border-radius: 0;
-  border: 1.5px solid var(--color-navy);
-  color: var(--color-navy);
-  overflow: hidden;
-  text-decoration: none;
-  isolation: isolate;
-  transition: color 0.38s ease, border-color 0.38s ease;
-}
+  .btn-sweep:hover,
+  .btn-sweep:focus-visible {
+    color: #fff;
+    border-color: var(--color-coral-deep);
+  }
 
-.btn-sweep::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-coral-deep) 100%);
-  translate: -100% 0;
-  transition: translate 0.38s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: -1;
-}
+  /* Variant for dark (navy) backgrounds. Hover still sweeps to coral via the rules above. */
+  .btn-sweep--light {
+    border-color: rgba(255, 255, 255, 0.7);
+    color: #fff;
+  }
 
-.btn-sweep:hover::before,
-.btn-sweep:focus-visible::before {
-  translate: 0 0;
-}
+  .btn-sweep__label {
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
 
-.btn-sweep:hover,
-.btn-sweep:focus-visible {
-  color: #fff;
-  border-color: var(--color-coral-deep);
-}
+  .btn-sweep__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 0;
+    flex-shrink: 0;
+    transition: transform 0.28s ease;
+  }
 
-.btn-sweep__label {
-  font-size: 0.78rem;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
+  .btn-sweep:hover .btn-sweep__arrow,
+  .btn-sweep:focus-visible .btn-sweep__arrow {
+    transform: translateX(3px);
+  }
 
-.btn-sweep__arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 0;
-  flex-shrink: 0;
-  transition: transform 0.28s ease;
-}
-
-.btn-sweep:hover .btn-sweep__arrow,
-.btn-sweep:focus-visible .btn-sweep__arrow {
-  transform: translateX(3px);
-}
-
-.btn-sweep:focus-visible {
-  outline: 2px solid var(--color-coral);
-  outline-offset: 3px;
+  .btn-sweep:focus-visible {
+    outline: 2px solid var(--color-coral);
+    outline-offset: 3px;
+  }
 }

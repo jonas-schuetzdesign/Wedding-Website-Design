@@ -1,10 +1,20 @@
-import { useState } from "react";
+type ScheduleItem = {
+  day: string;
+  date: string;
+  title: string;
+  detail: string;
+  time: string;
+  // A part of the programme that isn't fixed yet. The row is shown behind a frosted layer
+  // with a "more soon" banner in front, so its title, time and detail are only placeholders.
+  teaser?: boolean;
+};
 
-const schedule = [
+const schedule: ScheduleItem[] = [
   {
     day: "Samstag",
     date: "19. Juni 2027",
-    title: "Ankunft & Apéro",
+    // \u200C (zero-width non-joiner) stops Bigilla's "ri" ligature, which makes "Drink" read as "Dnnk".
+    title: "Ankunft & Welcome Dr\u200Cink",
     detail:
       "Anreise im Schloss Hünigen ab dem frühen Nachmittag. Wir begrüssen euch mit einem Apéro und stossen gemeinsam auf das Wochenende an.",
     time: "ab 14:00 Uhr",
@@ -18,6 +28,16 @@ const schedule = [
     time: "ab 15:00 Uhr",
   },
   {
+    day: "Samstag",
+    date: "19. Juni 2027",
+    // Placeholders: only visible through the frosted layer and hidden from screen readers.
+    title: "Dinner, Reden & Tanz",
+    time: "ab 00:00 Uhr",
+    detail:
+      "Nach der Trauung geht es weiter mit Dinner, Reden und Tanz bis tief in die Nacht. Mehr dazu verraten wir bald hier.",
+    teaser: true,
+  },
+  {
     day: "Sonntag",
     date: "20. Juni 2027",
     title: "Abschlussbrunch",
@@ -27,70 +47,66 @@ const schedule = [
   },
 ];
 
-// Schloss Hünigen, Freimettigenstrasse 9, 3510 Konolfingen
-const COORDS = { lat: 46.8728, lng: 7.6227 };
-const APPLE_MAPS =
-  `https://maps.apple.com/?address=Freimettigenstrasse+9,3510+Konolfingen,Switzerland&ll=${COORDS.lat},${COORDS.lng}&q=Schloss+H%C3%BCnigen`;
-const GOOGLE_MAPS =
-  `https://www.google.com/maps/search/?api=1&query=Schloss+H%C3%BCnigen+Freimettigenstrasse+9+3510+Konolfingen`;
-const OSM_EMBED =
-  `https://www.openstreetmap.org/export/embed.html?bbox=7.6127%2C46.8628%2C7.6327%2C46.8828&layer=mapnik&marker=${COORDS.lat}%2C${COORDS.lng}`;
+const ROW_CLASSES =
+  "flex flex-wrap items-start justify-between gap-x-4 gap-y-6 py-12 md:grid md:grid-cols-12 md:items-start md:gap-x-10 md:py-14";
 
-function PinIcon() {
+// Number, date/time and text of one schedule row. `hideAccents` keeps the space of the coral
+// number and date but doesn't draw them, so no coral shows through the teaser's frosted layer.
+function RowContent({ item, number, hideAccents = false }: { item: ScheduleItem; number: number; hideAccents?: boolean }) {
+  const accent = hideAccents ? "invisible" : "";
   return (
-    <svg
-      width="18"
-      height="22"
-      viewBox="0 0 18 22"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      className="shrink-0"
-    >
-      <path
-        d="M9 0C5.134 0 2 3.134 2 7c0 5.25 7 15 7 15s7-9.75 7-15c0-3.866-3.134-7-7-7Z"
-        fill="var(--color-coral)"
-        opacity="0.18"
-      />
-      <path
-        d="M9 1C5.686 1 3 3.686 3 7c0 4.8 6 13.5 6 13.5S15 11.8 15 7c0-3.314-2.686-6-6-6Z"
-        stroke="var(--color-coral)"
-        strokeWidth="1.4"
-        fill="none"
-      />
-      <circle cx="9" cy="7" r="2.2" fill="var(--color-coral)" />
-    </svg>
+    <>
+      <span className={`font-display text-4xl text-coral-deep md:col-span-2 md:text-6xl ${accent}`}>
+        {String(number).padStart(2, "0")}
+      </span>
+
+      <div className="text-right md:col-span-3 md:w-fit md:mx-auto md:text-left">
+        {/* One line on phones ("Samstag, 19. Juni 2027"). From md the column is narrow, so the
+            weekday gets its own line (without the comma) and all dates wrap the same way. */}
+        <p className={`text-base uppercase tracking-[0.16em] text-coral-deep ${accent}`}>
+          <span className="md:block">
+            {item.day}
+            <span className="md:hidden">,</span>
+          </span>{" "}
+          {item.date}
+        </p>
+        <p className="mt-2 text-base font-semibold tracking-[0.16em] text-navy">{item.time}</p>
+      </div>
+
+      <div className="w-full md:col-span-7 md:w-auto">
+        <h3 className="font-display text-5xl text-navy">{item.title}</h3>
+        <p className="mt-3 text-base leading-relaxed text-ink-strong">{item.detail}</p>
+      </div>
+    </>
   );
 }
 
-function AppleIcon() {
+// A row that isn't announced yet: the placeholder row sits behind a frosted layer
+// (background blur), and a banner in front says more is coming.
+function TeaserRow({ item, number }: { item: ScheduleItem; number: number }) {
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <path
-        d="M10.6 7.4c0-1.5 1.2-2.2 1.3-2.3-.7-1-1.8-1.2-2.2-1.2-1 0-1.8.6-2.3.6-.5 0-1.3-.6-2.1-.6C3.8 4 2.5 4.9 1.8 6.3c-1.3 2.3-.4 5.7.9 7.5.6.9 1.3 1.8 2.2 1.8.9 0 1.2-.6 2.2-.6 1.1 0 1.4.6 2.3.5.9 0 1.5-.8 2.1-1.7.7-1 1-1.9 1-2s-1.9-.8-1.9-2.4Z"
-        fill="currentColor"
-      />
-      <path
-        d="M9 2.7c.5-.6.8-1.4.7-2.2-.7 0-1.6.5-2.1 1.1-.4.5-.8 1.3-.7 2.1.8.1 1.6-.4 2.1-1Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+    <li className="relative overflow-hidden">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 flex select-none items-center">
+        <div className={`w-full ${ROW_CLASSES}`}>
+          <RowContent item={item} number={number} hideAccents />
+        </div>
+      </div>
 
-function GoogleMapsIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <circle cx="7" cy="6" r="5.5" stroke="currentColor" strokeWidth="1.2" />
-      <circle cx="7" cy="6" r="2" fill="currentColor" />
-      <line x1="7" y1="11" x2="7" y2="14" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-    </svg>
+      <div className="relative flex justify-center bg-white/20 py-12 backdrop-blur-md md:py-16">
+        <div className="mx-5 max-w-lg border border-coral/30 bg-white/65 px-6 py-8 text-center sm:mx-0 md:px-12 md:py-10">
+          <p className="text-base uppercase tracking-[0.16em] text-coral-deep">Samstagabend</p>
+          <h3 className="mt-3 font-display text-4xl text-navy md:text-5xl">Mehr verraten wir bald.</h3>
+          <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-ink-strong">
+            Ein paar Wochen vor der Hochzeit findet ihr hier das definitive Programm — schaut also gerne
+            nochmals vorbei.
+          </p>
+        </div>
+      </div>
+    </li>
   );
 }
 
 export default function WhenWhere() {
-  const [mapActive, setMapActive] = useState(false);
-
   return (
     <section id="wann-wo" className="border-t border-line bg-white">
       <div className="mx-auto max-w-6xl px-6 md:px-10">
@@ -104,7 +120,7 @@ export default function WhenWhere() {
                 <br />
                 ein Versprechen.
               </h2>
-              <p className="mt-6 text-[0.95rem] leading-relaxed text-ink-strong">
+              <p className="mt-6 text-base leading-relaxed text-ink-strong">
                 Wir feiern unsere Hochzeit über ein ganzes Wochenende im Schloss Hünigen bei
                 Konolfingen — umgeben von Park, Wald und den Menschen, die uns am wichtigsten sind.
               </p>
@@ -112,114 +128,29 @@ export default function WhenWhere() {
 
             <dl className="space-y-6 text-left md:shrink-0 md:text-right">
               <div>
-                <dt className="text-sm uppercase tracking-[0.16em] text-coral-deep">Datum</dt>
-                <dd className="mt-2 text-sm font-semibold tracking-[0.16em] text-navy">19. – 20. Juni 2027</dd>
+                <dt className="text-base uppercase tracking-[0.16em] text-coral-deep">Datum</dt>
+                <dd className="mt-2 text-base font-semibold tracking-[0.16em] text-navy">19. – 20. Juni 2027</dd>
               </div>
               <div>
-                <dt className="text-sm uppercase tracking-[0.16em] text-coral-deep">Ort</dt>
-                <dd className="mt-2 text-sm font-semibold tracking-[0.16em] text-navy">Schloss Hünigen</dd>
+                <dt className="text-base uppercase tracking-[0.16em] text-coral-deep">Ort</dt>
+                <dd className="mt-2 text-base font-semibold tracking-[0.16em] text-navy">Schloss Hünigen</dd>
               </div>
             </dl>
           </div>
         </div>
 
         {/* ── Zone B: Programm ── */}
-        <ol className="divide-y divide-line border-b border-line">
-          {schedule.map((item, i) => (
-            <li
-              key={i}
-              className="flex flex-wrap items-start justify-between gap-x-4 gap-y-6 py-12 md:grid md:grid-cols-12 md:items-start md:gap-x-10 md:py-14"
-            >
-              <span className="font-display text-4xl text-coral-deep md:col-span-2 md:text-6xl">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-
-              <div className="text-right md:col-span-3 md:w-fit md:mx-auto md:text-left">
-                <p className="text-sm uppercase tracking-[0.16em] text-coral-deep">
-                  {item.day}, {item.date}
-                </p>
-                <p className="mt-2 text-sm font-semibold tracking-[0.16em] text-navy">
-                  {item.time}
-                </p>
-              </div>
-
-              <div className="w-full md:col-span-7 md:w-auto">
-                <h3 className="font-display text-5xl text-navy">{item.title}</h3>
-                <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-strong">
-                  {item.detail}
-                </p>
-              </div>
-            </li>
-          ))}
+        <ol className="divide-y divide-line">
+          {schedule.map((item, i) =>
+            item.teaser ? (
+              <TeaserRow key={item.title} item={item} number={i + 1} />
+            ) : (
+              <li key={item.title} className={ROW_CLASSES}>
+                <RowContent item={item} number={i + 1} />
+              </li>
+            ),
+          )}
         </ol>
-      </div>
-
-      {/* ── Zone C: Karte, randabfallend, mit Adress-Overlay ── */}
-      <div
-        className="relative h-105 sm:h-120 md:h-150"
-        onMouseLeave={() => setMapActive(false)}
-      >
-        <iframe
-          title="Karte Schloss Hünigen"
-          src={OSM_EMBED}
-          className="absolute inset-0 h-full w-full border-0"
-          style={{ pointerEvents: mapActive ? "auto" : "none" }}
-          loading="lazy"
-          referrerPolicy="no-referrer"
-          aria-label="OpenStreetMap-Karte mit Markierung für Schloss Hünigen, Freimettigenstrasse 9, Konolfingen"
-        />
-
-        {!mapActive && (
-          <button
-            type="button"
-            onClick={() => setMapActive(true)}
-            aria-label="Karte aktivieren, um zu zoomen und zu verschieben"
-            className="absolute inset-0 flex items-center justify-center bg-navy/5 transition-colors hover:bg-navy/10"
-          >
-            <span className="border border-white bg-navy/80 px-4 py-2 text-xs uppercase tracking-[0.18em] text-white">
-              Zum Interagieren klicken
-            </span>
-          </button>
-        )}
-
-        <div className="absolute inset-x-0 bottom-0 md:inset-x-auto md:bottom-8 md:left-8 md:right-auto">
-          <div className="border border-line bg-white p-6 sm:max-w-sm sm:p-8">
-            <div className="flex items-start gap-3">
-              <PinIcon />
-              <div>
-                <p className="font-display text-xl leading-tight text-navy">
-                  Schloss Hünigen
-                </p>
-                <p className="mt-1.5 text-base leading-snug text-ink-strong">
-                  Freimettigenstrasse 9
-                  <br />
-                  3510 Konolfingen BE
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href={APPLE_MAPS}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-line bg-white px-4 py-2 text-xs uppercase tracking-[0.18em] text-ink-strong transition-all hover:border-coral/50 hover:text-coral-deep hover:shadow-sm"
-              >
-                <AppleIcon />
-                Apple Maps
-              </a>
-              <a
-                href={GOOGLE_MAPS}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-line bg-white px-4 py-2 text-xs uppercase tracking-[0.18em] text-ink-strong transition-all hover:border-coral/50 hover:text-coral-deep hover:shadow-sm"
-              >
-                <GoogleMapsIcon />
-                Google Maps
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
